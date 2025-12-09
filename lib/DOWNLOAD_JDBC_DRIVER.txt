@@ -1,0 +1,36 @@
+# IMPORTANT: MySQL JDBC Driver Required!
+
+## The `lib` folder needs the MySQL Connector/J driver to run this application.
+
+### Quick Download (Choose ONE method):
+
+#### Method 1: PowerShell Download (Fastest)
+Open PowerShell in this directory and run:
+```powershell
+Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.2.0/mysql-connector-j-8.2.0.jar" -OutFile "mysql-connector-j-8.2.0.jar"
+```
+
+#### Method 2: Manual Download
+1. Visit: https://dev.mysql.com/downloads/connector/j/
+2. Click "Platform Independent" 
+3. Download the ZIP archive
+4. Extract and find: `mysql-connector-j-8.x.x.jar`
+5. Copy it to this `lib` folder
+
+#### Method 3: Maven Central
+Direct link to download:
+https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.2.0/mysql-connector-j-8.2.0.jar
+
+### After downloading:
+- The file should be in: `trackRecord/lib/mysql-connector-j-8.x.x.jar`
+- File size should be around 2-3 MB
+- Then run the build script: `.\build.ps1` or `build.bat`
+
+### Verify Installation:
+After placing the JAR file here, you should see:
+```
+lib/
+└── mysql-connector-j-8.2.0.jar
+```
+
+You're ready to build and run! 🚀
