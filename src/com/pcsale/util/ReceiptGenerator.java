@@ -10,6 +10,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.awt.Component;
 import java.io.File;
+import java.awt.*;
+import java.awt.print.*;
+import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
 
 /**
  * ReceiptGenerator - Utility to generate and export receipts
@@ -84,19 +88,126 @@ public class ReceiptGenerator {
     }
 
     public static void exportToTextFile(Component parent, Sale sale) {
-        String[] options = {"Text File (.txt)", "HTML File (.html)"};
+        String[] options = {"🖨️ Print Now", "Save as Text (.txt)", "Save as HTML (.html)"};
         int choice = JOptionPane.showOptionDialog(parent, 
-            "Select export format:", 
-            "Export Receipt", 
+            "What would you like to do with the receipt?", 
+            "Receipt Options", 
             JOptionPane.DEFAULT_OPTION, 
             JOptionPane.QUESTION_MESSAGE, 
             null, options, options[0]);
 
         if (choice == 0) {
-            saveTextReceipt(parent, sale);
+            printReceiptDirectly(parent, sale);
         } else if (choice == 1) {
+            saveTextReceipt(parent, sale);
+        } else if (choice == 2) {
             saveHtmlReceipt(parent, sale);
         }
+    }
+
+    /**
+     * Print receipt directly to the printer using system print dialog
+     */
+    public static void printReceiptDirectly(Component parent, Sale sale) {
+        try {
+            // Create HTML content for printing (better formatting)
+            String htmlContent = generatePrintableHtmlReceipt(sale);
+            
+            // Create a JEditorPane to render the HTML
+            JEditorPane editorPane = new JEditorPane();
+            editorPane.setContentType("text/html");
+            editorPane.setText(htmlContent);
+            editorPane.setEditable(false);
+            
+            // Set preferred size for receipt (typical receipt width ~80mm)
+            editorPane.setSize(280, Integer.MAX_VALUE);
+            editorPane.setPreferredSize(new Dimension(280, editorPane.getPreferredSize().height));
+            
+            // Print the editor pane
+            boolean complete = editorPane.print();
+            
+            if (complete) {
+                JOptionPane.showMessageDialog(parent, 
+                    "Receipt sent to printer successfully!", 
+                    "Print Complete", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(parent, 
+                    "Printing was cancelled.", 
+                    "Print Cancelled", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (PrinterException e) {
+            JOptionPane.showMessageDialog(parent, 
+                "Error printing receipt: " + e.getMessage(), 
+                "Print Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Generate HTML receipt optimized for direct printing
+     */
+    private static String generatePrintableHtmlReceipt(Sale sale) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html><head><style>");
+        sb.append("body { font-family: 'Courier New', Courier, monospace; font-size: 10px; width: 250px; margin: 0; padding: 5px; }");
+        sb.append(".center { text-align: center; }");
+        sb.append(".bold { font-weight: bold; }");
+        sb.append("table { width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 9px; }");
+        sb.append("th { border-bottom: 1px dashed #000; text-align: left; padding: 2px; }");
+        sb.append("td { padding: 2px; }");
+        sb.append(".right { text-align: right; }");
+        sb.append(".total-row { border-top: 1px solid #000; }");
+        sb.append("hr { border: 0; border-top: 1px dashed #000; margin: 5px 0; }");
+        sb.append("</style></head><body>");
+        
+        sb.append("<div class='center bold' style='font-size: 12px;'>").append(STORE_NAME).append("</div>");
+        sb.append("<div class='center' style='font-size: 9px;'>").append(STORE_ADDRESS).append("</div>");
+        sb.append("<div class='center' style='font-size: 9px;'>").append(STORE_PHONE).append("</div>");
+        sb.append("<hr>");
+        
+        sb.append("<div><b>Invoice:</b> ").append(sale.getInvoiceNo()).append("</div>");
+        
+        String dateStr = "";
+        if (sale.getSaleDate() != null) {
+            java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter.ofPattern("MMM dd, yyyy hh:mm a");
+            dateStr = sale.getSaleDate().format(dtf);
+        }
+        
+        sb.append("<div><b>Date:</b> ").append(dateStr).append("</div>");
+        sb.append("<div><b>Cashier:</b> ").append(sale.getUserName() != null ? sale.getUserName() : SessionManager.getCurrentUser().getFullName()).append("</div>");
+        sb.append("<hr>");
+        
+        sb.append("<table>");
+        sb.append("<tr><th>Item</th><th>Qty</th><th class='right'>Total</th></tr>");
+        
+        for (SaleItem item : sale.getItems()) {
+            sb.append("<tr>");
+            sb.append("<td>").append(item.getProductName()).append("</td>");
+            sb.append("<td>").append(item.getQuantity()).append("</td>");
+            sb.append("<td class='right'>").append(Formatter.formatCurrency(item.getSubtotal().doubleValue())).append("</td>");
+            sb.append("</tr>");
+        }
+        sb.append("</table>");
+        sb.append("<hr>");
+        
+        sb.append("<table>");
+        sb.append("<tr><td><b>Subtotal:</b></td><td class='right'>").append(Formatter.formatCurrency(sale.getSubtotal().doubleValue())).append("</td></tr>");
+        sb.append("<tr><td>Tax:</td><td class='right'>").append(Formatter.formatCurrency(sale.getTax().doubleValue())).append("</td></tr>");
+        sb.append("<tr><td>Discount:</td><td class='right'>").append(Formatter.formatCurrency(sale.getDiscount().doubleValue())).append("</td></tr>");
+        sb.append("<tr style='font-size: 11px;'><td><b>TOTAL:</b></td><td class='right'><b>").append(Formatter.formatCurrency(sale.getTotalAmount().doubleValue())).append("</b></td></tr>");
+        sb.append("<tr><td>Paid:</td><td class='right'>").append(Formatter.formatCurrency(sale.getAmountPaid().doubleValue())).append("</td></tr>");
+        sb.append("<tr><td>Change:</td><td class='right'>").append(Formatter.formatCurrency(sale.getChangeDue().doubleValue())).append("</td></tr>");
+        sb.append("</table>");
+        
+        sb.append("<div><b>Payment:</b> ").append(sale.getPaymentMethod().toUpperCase()).append("</div>");
+        sb.append("<hr>");
+        sb.append("<div class='center bold'>THANK YOU!</div>");
+        sb.append("<div class='center'>Please come again!</div>");
+        
+        sb.append("</body></html>");
+        return sb.toString();
     }
 
     private static void saveTextReceipt(Component parent, Sale sale) {
