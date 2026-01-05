@@ -110,7 +110,7 @@ public class ReceiptGenerator {
      */
     public static void printReceiptDirectly(Component parent, Sale sale) {
         try {
-            // Create HTML content for printing (better formatting)
+            // Create HTML content for printing
             String htmlContent = generatePrintableHtmlReceipt(sale);
             
             // Create a JEditorPane to render the HTML
@@ -119,7 +119,7 @@ public class ReceiptGenerator {
             editorPane.setText(htmlContent);
             editorPane.setEditable(false);
             
-            // Set preferred size for receipt (typical receipt width ~80mm)
+            // Set preferred size for receipt 
             editorPane.setSize(280, Integer.MAX_VALUE);
             editorPane.setPreferredSize(new Dimension(280, editorPane.getPreferredSize().height));
             
@@ -306,3 +306,4 @@ public class ReceiptGenerator {
         return sb.toString();
     }
 }
+

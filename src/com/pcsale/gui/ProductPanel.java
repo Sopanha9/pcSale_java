@@ -235,7 +235,7 @@ public class ProductPanel extends JPanel {
             return;
         }
         
-        int productId = (int) tableModel.getValueAt(selectedRow, 0);
+        int productId = (int) tableModel.getValueAt(selectedRow, 1);
         Product product = productDAO.getProductById(productId);
         
         ProductDialog dialog = new ProductDialog((Frame) SwingUtilities.getWindowAncestor(this), product);
@@ -258,7 +258,7 @@ public class ProductPanel extends JPanel {
             JOptionPane.YES_NO_OPTION);
         
         if (option == JOptionPane.YES_OPTION) {
-            int productId = (int) tableModel.getValueAt(selectedRow, 0);
+            int productId = (int) tableModel.getValueAt(selectedRow, 1);
             boolean success = productDAO.deleteProduct(productId);
             
             if (success) {

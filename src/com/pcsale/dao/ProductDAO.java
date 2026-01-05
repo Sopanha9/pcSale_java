@@ -21,6 +21,7 @@ public class ProductDAO {
                      "FROM products p " +
                      "LEFT JOIN categories c ON p.category_id = c.id " +
                      "LEFT JOIN suppliers s ON p.supplier_id = s.id " +
+                     "WHERE p.status = 'active' " +
                      "ORDER BY p.name";
         
         try (Connection conn = DatabaseConfig.getConnection();
@@ -221,10 +222,10 @@ public class ProductDAO {
     }
     
     /**
-     * Delete product
+     * Delete product (Soft delete)
      */
     public boolean deleteProduct(int id) {
-        String sql = "DELETE FROM products WHERE id = ?";
+        String sql = "UPDATE products SET status = 'inactive' WHERE id = ?";
         
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
