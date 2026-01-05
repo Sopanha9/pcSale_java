@@ -22,6 +22,8 @@ public class Product {
     private String unit;
     private String image;
     private String status;
+    private String specifications; // JSON or text description of PC specs
+    private int warrantyPeriod; // In months
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
@@ -152,6 +154,22 @@ public class Product {
     
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getSpecifications() {
+        return specifications;
+    }
+
+    public void setSpecifications(String specifications) {
+        this.specifications = specifications;
+    }
+
+    public int getWarrantyPeriod() {
+        return warrantyPeriod;
+    }
+
+    public void setWarrantyPeriod(int warrantyPeriod) {
+        this.warrantyPeriod = warrantyPeriod;
     }
     
     public LocalDateTime getCreatedAt() {

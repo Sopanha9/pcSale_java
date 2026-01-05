@@ -274,7 +274,8 @@ public class ProductPanel extends JPanel {
      * Inner class - Product Add/Edit Dialog
      */
     class ProductDialog extends JDialog {
-        private JTextField txtBarcode, txtName, txtCostPrice, txtSellingPrice, txtStock, txtReorderLevel;
+        private JTextField txtBarcode, txtName, txtCostPrice, txtSellingPrice, txtStock, txtReorderLevel, txtWarranty;
+        private JTextArea txtSpecs;
         private JComboBox<Category> cboCategory;
         private JComboBox<String> cboStatus;
         private JLabel lblImagePreview;
@@ -293,7 +294,7 @@ public class ProductPanel extends JPanel {
         }
         
         private void initDialog() {
-            setSize(500, 650);
+            setSize(500, 800);
             setLayout(null);
             
             int y = 20;
@@ -383,6 +384,29 @@ public class ProductPanel extends JPanel {
             add(cboStatus);
             y += 40;
 
+            // Warranty
+            JLabel lblWarranty = new JLabel("Warranty (Mos):");
+            lblWarranty.setBounds(30, y, 120, 25);
+            add(lblWarranty);
+            
+            txtWarranty = new JTextField("0");
+            txtWarranty.setBounds(160, y, 140, 30);
+            add(txtWarranty);
+            y += 40;
+
+            // Specifications
+            JLabel lblSpecs = new JLabel("Specifications:");
+            lblSpecs.setBounds(30, y, 120, 25);
+            add(lblSpecs);
+            
+            txtSpecs = new JTextArea();
+            txtSpecs.setLineWrap(true);
+            txtSpecs.setWrapStyleWord(true);
+            JScrollPane scrollSpecs = new JScrollPane(txtSpecs);
+            scrollSpecs.setBounds(160, y, 300, 80);
+            add(scrollSpecs);
+            y += 100;
+
             // Image
             JLabel lblImage = new JLabel("Product Image:");
             lblImage.setBounds(30, y, 120, 25);
@@ -446,6 +470,8 @@ public class ProductPanel extends JPanel {
             txtSellingPrice.setText(product.getSellingPrice().toString());
             txtStock.setText(String.valueOf(product.getStockQuantity()));
             txtReorderLevel.setText(String.valueOf(product.getReorderLevel()));
+            txtWarranty.setText(String.valueOf(product.getWarrantyPeriod()));
+            txtSpecs.setText(product.getSpecifications() != null ? product.getSpecifications() : "");
             cboStatus.setSelectedItem(product.getStatus());
             
             selectedImagePath = product.getImage();
@@ -485,6 +511,8 @@ public class ProductPanel extends JPanel {
                 p.setSellingPrice(new BigDecimal(txtSellingPrice.getText().trim()));
                 p.setStockQuantity(Integer.parseInt(txtStock.getText().trim()));
                 p.setReorderLevel(Integer.parseInt(txtReorderLevel.getText().trim()));
+                p.setWarrantyPeriod(Integer.parseInt(txtWarranty.getText().trim().isEmpty() ? "0" : txtWarranty.getText().trim()));
+                p.setSpecifications(txtSpecs.getText().trim());
                 p.setStatus(cboStatus.getSelectedItem().toString());
                 
                 // Handle image copy
