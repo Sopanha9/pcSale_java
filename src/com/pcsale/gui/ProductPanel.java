@@ -64,7 +64,7 @@ public class ProductPanel extends JPanel {
         
         JButton btnRefresh = new JButton("Refresh");
         btnRefresh.setBackground(new Color(149, 165, 166));
-        btnRefresh.setForeground(Color.WHITE);
+        btnRefresh.setForeground(Color.BLACK);
         btnRefresh.setFocusPainted(false);
         btnRefresh.addActionListener(e -> loadProducts());
         
@@ -105,7 +105,7 @@ public class ProductPanel extends JPanel {
         
         JButton btnAdd = new JButton("Add Product");
         btnAdd.setBackground(new Color(46, 213, 115));
-        btnAdd.setForeground(Color.WHITE);
+        btnAdd.setForeground(Color.BLACK);
         btnAdd.setFont(new Font("Arial", Font.BOLD, 14));
         btnAdd.setFocusPainted(false);
         btnAdd.setPreferredSize(new Dimension(150, 40));
@@ -113,7 +113,7 @@ public class ProductPanel extends JPanel {
         
         JButton btnEdit = new JButton("Edit Product");
         btnEdit.setBackground(new Color(52, 152, 219));
-        btnEdit.setForeground(Color.WHITE);
+        btnEdit.setForeground(Color.BLACK);
         btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
         btnEdit.setFocusPainted(false);
         btnEdit.setPreferredSize(new Dimension(150, 40));
@@ -121,7 +121,7 @@ public class ProductPanel extends JPanel {
         
         JButton btnDelete = new JButton("Delete Product");
         btnDelete.setBackground(new Color(231, 76, 60));
-        btnDelete.setForeground(Color.WHITE);
+        btnDelete.setForeground(Color.BLACK);
         btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
         btnDelete.setFocusPainted(false);
         btnDelete.setPreferredSize(new Dimension(150, 40));
@@ -129,7 +129,7 @@ public class ProductPanel extends JPanel {
         
         JButton btnLowStock = new JButton("Low Stock");
         btnLowStock.setBackground(new Color(243, 156, 18));
-        btnLowStock.setForeground(Color.WHITE);
+        btnLowStock.setForeground(Color.BLACK);
         btnLowStock.setFont(new Font("Arial", Font.BOLD, 14));
         btnLowStock.setFocusPainted(false);
         btnLowStock.setPreferredSize(new Dimension(150, 40));
@@ -427,7 +427,7 @@ public class ProductPanel extends JPanel {
             JButton btnSave = new JButton("Save");
             btnSave.setBounds(160, y, 120, 35);
             btnSave.setBackground(new Color(46, 213, 115));
-            btnSave.setForeground(Color.WHITE);
+            btnSave.setForeground(Color.BLACK);
             btnSave.setFocusPainted(false);
             btnSave.addActionListener(e -> saveProduct());
             add(btnSave);
@@ -435,7 +435,7 @@ public class ProductPanel extends JPanel {
             JButton btnCancel = new JButton("Cancel");
             btnCancel.setBounds(300, y, 120, 35);
             btnCancel.setBackground(new Color(149, 165, 166));
-            btnCancel.setForeground(Color.WHITE);
+            btnCancel.setForeground(Color.BLACK);
             btnCancel.setFocusPainted(false);
             btnCancel.addActionListener(e -> dispose());
             add(btnCancel);
