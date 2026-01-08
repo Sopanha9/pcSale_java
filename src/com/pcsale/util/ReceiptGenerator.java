@@ -140,7 +140,7 @@ public class ReceiptGenerator {
         } catch (PrinterException e) {
             JOptionPane.showMessageDialog(parent, 
                 "Error printing receipt: " + e.getMessage(), 
-                "Print Error", 
+                "Print Error",  
                 JOptionPane.ERROR_MESSAGE);
         }
     }
