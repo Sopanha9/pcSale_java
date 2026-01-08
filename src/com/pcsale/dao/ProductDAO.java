@@ -146,8 +146,8 @@ public class ProductDAO {
      */
     public boolean addProduct(Product product) {
         String sql = "INSERT INTO products (barcode, name, category_id, supplier_id, cost_price, " +
-                     "selling_price, stock_quantity, reorder_level, unit, image, status) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     "selling_price, stock_quantity, reorder_level, unit, image, status, specifications, warranty_period) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -163,6 +163,8 @@ public class ProductDAO {
             stmt.setString(9, product.getUnit());
             stmt.setString(10, product.getImage());
             stmt.setString(11, product.getStatus());
+            stmt.setString(12, product.getSpecifications());
+            stmt.setInt(13, product.getWarrantyPeriod());
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -177,7 +179,7 @@ public class ProductDAO {
     public boolean updateProduct(Product product) {
         String sql = "UPDATE products SET barcode = ?, name = ?, category_id = ?, supplier_id = ?, " +
                      "cost_price = ?, selling_price = ?, stock_quantity = ?, reorder_level = ?, " +
-                     "unit = ?, image = ?, status = ? WHERE id = ?";
+                     "unit = ?, image = ?, status = ?, specifications = ?, warranty_period = ? WHERE id = ?";
         
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -193,7 +195,9 @@ public class ProductDAO {
             stmt.setString(9, product.getUnit());
             stmt.setString(10, product.getImage());
             stmt.setString(11, product.getStatus());
-            stmt.setInt(12, product.getId());
+            stmt.setString(12, product.getSpecifications());
+            stmt.setInt(13, product.getWarrantyPeriod());
+            stmt.setInt(14, product.getId());
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -279,6 +283,8 @@ public class ProductDAO {
         product.setUnit(rs.getString("unit"));
         product.setImage(rs.getString("image"));
         product.setStatus(rs.getString("status"));
+        product.setSpecifications(rs.getString("specifications"));
+        product.setWarrantyPeriod(rs.getInt("warranty_period"));
         
         Timestamp createdAt = rs.getTimestamp("created_at");
         if (createdAt != null) {

@@ -52,7 +52,7 @@ public class UserPanel extends JPanel {
         
         JButton btnAdd = new JButton("Add User");
         btnAdd.setBackground(new Color(46, 213, 115));
-        btnAdd.setForeground(Color.WHITE);
+        btnAdd.setForeground(Color.BLACK);
         btnAdd.addActionListener(e -> showAddDialog());
         
         JButton btnRefresh = new JButton("Refresh");

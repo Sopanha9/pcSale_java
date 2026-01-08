@@ -64,7 +64,7 @@ public class ProductPanel extends JPanel {
         
         JButton btnRefresh = new JButton("Refresh");
         btnRefresh.setBackground(new Color(149, 165, 166));
-        btnRefresh.setForeground(Color.WHITE);
+        btnRefresh.setForeground(Color.BLACK);
         btnRefresh.setFocusPainted(false);
         btnRefresh.addActionListener(e -> loadProducts());
         
@@ -105,7 +105,7 @@ public class ProductPanel extends JPanel {
         
         JButton btnAdd = new JButton("Add Product");
         btnAdd.setBackground(new Color(46, 213, 115));
-        btnAdd.setForeground(Color.WHITE);
+        btnAdd.setForeground(Color.BLACK);
         btnAdd.setFont(new Font("Arial", Font.BOLD, 14));
         btnAdd.setFocusPainted(false);
         btnAdd.setPreferredSize(new Dimension(150, 40));
@@ -113,7 +113,7 @@ public class ProductPanel extends JPanel {
         
         JButton btnEdit = new JButton("Edit Product");
         btnEdit.setBackground(new Color(52, 152, 219));
-        btnEdit.setForeground(Color.WHITE);
+        btnEdit.setForeground(Color.BLACK);
         btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
         btnEdit.setFocusPainted(false);
         btnEdit.setPreferredSize(new Dimension(150, 40));
@@ -121,7 +121,7 @@ public class ProductPanel extends JPanel {
         
         JButton btnDelete = new JButton("Delete Product");
         btnDelete.setBackground(new Color(231, 76, 60));
-        btnDelete.setForeground(Color.WHITE);
+        btnDelete.setForeground(Color.BLACK);
         btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
         btnDelete.setFocusPainted(false);
         btnDelete.setPreferredSize(new Dimension(150, 40));
@@ -129,7 +129,7 @@ public class ProductPanel extends JPanel {
         
         JButton btnLowStock = new JButton("Low Stock");
         btnLowStock.setBackground(new Color(243, 156, 18));
-        btnLowStock.setForeground(Color.WHITE);
+        btnLowStock.setForeground(Color.BLACK);
         btnLowStock.setFont(new Font("Arial", Font.BOLD, 14));
         btnLowStock.setFocusPainted(false);
         btnLowStock.setPreferredSize(new Dimension(150, 40));
@@ -274,7 +274,8 @@ public class ProductPanel extends JPanel {
      * Inner class - Product Add/Edit Dialog
      */
     class ProductDialog extends JDialog {
-        private JTextField txtBarcode, txtName, txtCostPrice, txtSellingPrice, txtStock, txtReorderLevel;
+        private JTextField txtBarcode, txtName, txtCostPrice, txtSellingPrice, txtStock, txtReorderLevel, txtWarranty;
+        private JTextArea txtSpecs;
         private JComboBox<Category> cboCategory;
         private JComboBox<String> cboStatus;
         private JLabel lblImagePreview;
@@ -293,7 +294,7 @@ public class ProductPanel extends JPanel {
         }
         
         private void initDialog() {
-            setSize(500, 650);
+            setSize(500, 800);
             setLayout(null);
             
             int y = 20;
@@ -383,6 +384,29 @@ public class ProductPanel extends JPanel {
             add(cboStatus);
             y += 40;
 
+            // Warranty
+            JLabel lblWarranty = new JLabel("Warranty (Mos):");
+            lblWarranty.setBounds(30, y, 120, 25);
+            add(lblWarranty);
+            
+            txtWarranty = new JTextField("0");
+            txtWarranty.setBounds(160, y, 140, 30);
+            add(txtWarranty);
+            y += 40;
+
+            // Specifications
+            JLabel lblSpecs = new JLabel("Specifications:");
+            lblSpecs.setBounds(30, y, 120, 25);
+            add(lblSpecs);
+            
+            txtSpecs = new JTextArea();
+            txtSpecs.setLineWrap(true);
+            txtSpecs.setWrapStyleWord(true);
+            JScrollPane scrollSpecs = new JScrollPane(txtSpecs);
+            scrollSpecs.setBounds(160, y, 300, 80);
+            add(scrollSpecs);
+            y += 100;
+
             // Image
             JLabel lblImage = new JLabel("Product Image:");
             lblImage.setBounds(30, y, 120, 25);
@@ -403,7 +427,7 @@ public class ProductPanel extends JPanel {
             JButton btnSave = new JButton("Save");
             btnSave.setBounds(160, y, 120, 35);
             btnSave.setBackground(new Color(46, 213, 115));
-            btnSave.setForeground(Color.WHITE);
+            btnSave.setForeground(Color.BLACK);
             btnSave.setFocusPainted(false);
             btnSave.addActionListener(e -> saveProduct());
             add(btnSave);
@@ -411,7 +435,7 @@ public class ProductPanel extends JPanel {
             JButton btnCancel = new JButton("Cancel");
             btnCancel.setBounds(300, y, 120, 35);
             btnCancel.setBackground(new Color(149, 165, 166));
-            btnCancel.setForeground(Color.WHITE);
+            btnCancel.setForeground(Color.BLACK);
             btnCancel.setFocusPainted(false);
             btnCancel.addActionListener(e -> dispose());
             add(btnCancel);
@@ -446,6 +470,8 @@ public class ProductPanel extends JPanel {
             txtSellingPrice.setText(product.getSellingPrice().toString());
             txtStock.setText(String.valueOf(product.getStockQuantity()));
             txtReorderLevel.setText(String.valueOf(product.getReorderLevel()));
+            txtWarranty.setText(String.valueOf(product.getWarrantyPeriod()));
+            txtSpecs.setText(product.getSpecifications() != null ? product.getSpecifications() : "");
             cboStatus.setSelectedItem(product.getStatus());
             
             selectedImagePath = product.getImage();
@@ -485,6 +511,8 @@ public class ProductPanel extends JPanel {
                 p.setSellingPrice(new BigDecimal(txtSellingPrice.getText().trim()));
                 p.setStockQuantity(Integer.parseInt(txtStock.getText().trim()));
                 p.setReorderLevel(Integer.parseInt(txtReorderLevel.getText().trim()));
+                p.setWarrantyPeriod(Integer.parseInt(txtWarranty.getText().trim().isEmpty() ? "0" : txtWarranty.getText().trim()));
+                p.setSpecifications(txtSpecs.getText().trim());
                 p.setStatus(cboStatus.getSelectedItem().toString());
                 
                 // Handle image copy

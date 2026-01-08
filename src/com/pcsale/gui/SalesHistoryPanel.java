@@ -167,7 +167,7 @@ public class SalesHistoryPanel extends JPanel {
         JButton btnViewDetails = new JButton("View Details");
         btnViewDetails.setFont(new Font("Arial", Font.PLAIN, 14));
         btnViewDetails.setBackground(new Color(52, 152, 219));
-        btnViewDetails.setForeground(Color.WHITE);
+        btnViewDetails.setForeground(Color.BLACK);
         btnViewDetails.setFocusPainted(false);
         btnViewDetails.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnViewDetails.addActionListener(e -> {
@@ -186,7 +186,7 @@ public class SalesHistoryPanel extends JPanel {
         JButton btnPrintReceipt = new JButton("Print Receipt");
         btnPrintReceipt.setFont(new Font("Arial", Font.PLAIN, 14));
         btnPrintReceipt.setBackground(new Color(46, 204, 113));
-        btnPrintReceipt.setForeground(Color.WHITE);
+        btnPrintReceipt.setForeground(Color.BLACK);
         btnPrintReceipt.setFocusPainted(false);
         btnPrintReceipt.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnPrintReceipt.addActionListener(e -> {
